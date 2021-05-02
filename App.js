@@ -1,21 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+import * as Font from 'expo-font';
+import ShopNavigator from './navigation/ShopNavigator';
+import AppLoading from 'expo-app-loading';
 
-export default function App() {
+const fetchFont = () =>
+  Font.loadAsync({
+    'montserrat-light': require('./assets/fonts/Montserrat-Light.ttf'),
+    'montserrat-bold': require('./assets/fonts/Montserrat-Bold.ttf'),
+  });
+
+const App = () => {
+  const [isReady, setIsReady] = useState(false);
+
+  if (!isReady) return <AppLoading startAsync={fetchFont} onFinish={() => setIsReady(true)} onError={console.warn} />;
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <ShopNavigator />
+    </Provider>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
