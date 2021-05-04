@@ -4,10 +4,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/styles';
 import BodyText from '../components/text/BodyText';
 
-const IconButton = ({ children, style, dataIcon, dataText, styleIcon, styleText, isGhost }) => {
+const IconButton = ({ children, style, dataIcon, dataText, styleIcon, styleText, isGhost, ...restProps }) => {
   const styleButton = [styles.container, style];
   return (
-    <Pressable style={isGhost ? styleButton : [...styleButton, { backgroundColor: COLORS.accent }]}>
+    <Pressable {...restProps} style={isGhost ? styleButton : [...styleButton, { backgroundColor: COLORS.accent }]}>
       <BodyText {...dataText} style={isGhost ? styleText : [styleText, { color: COLORS.primary }]}>
         {children}
       </BodyText>

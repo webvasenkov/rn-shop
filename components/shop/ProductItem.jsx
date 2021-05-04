@@ -3,23 +3,24 @@ import { View, ImageBackground, StyleSheet } from 'react-native';
 import { COLORS } from '../../constants/styles';
 import TitleText from '../text/TitleText';
 import IconButton from '../IconButton';
+import OverlayImage from '../OverlayImage';
 
 const ProductItem = ({ title, imageUrl, price, onMore, onAddToCart }) => {
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
-        <ImageBackground source={{ uri: imageUrl }} style={styles.image}>
-          <View style={styles.overlay}>
-            <TitleText style={styles.title}>{title}</TitleText>
-            <TitleText style={styles.price}>$ {price}</TitleText>
-          </View>
-        </ImageBackground>
+        <OverlayImage source={{ uri: imageUrl }} overlayStyle={styles.overlay}>
+          <TitleText style={styles.text}>{title}</TitleText>
+          <TitleText style={[styles.text, styles.price]}>$ {price}</TitleText>
+        </OverlayImage>
       </View>
       <View style={styles.buttonsContainer}>
-        <IconButton dataIcon={{ name: 'cart-outline' }} isGhost>
+        <IconButton onPress={onAddToCart} dataIcon={{ name: 'cart-outline' }} isGhost>
           Add To Cart
         </IconButton>
-        <IconButton dataIcon={{ name: 'eye-outline' }}>More</IconButton>
+        <IconButton onPress={onMore} dataIcon={{ name: 'eye-outline' }}>
+          More
+        </IconButton>
       </View>
     </View>
   );
@@ -40,24 +41,15 @@ const styles = StyleSheet.create({
     height: '75%',
     width: '100%',
   },
-  image: {
-    height: '100%',
-    width: '100%',
-    resizeMode: 'cover',
-  },
   overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     justifyContent: 'space-between',
     padding: 15,
   },
-  title: {
-    alignSelf: 'flex-start',
+  text: {
     color: '#fff',
   },
   price: {
     alignSelf: 'flex-end',
-    color: '#fff',
     fontSize: 21,
   },
   buttonsContainer: {
