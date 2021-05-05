@@ -18,6 +18,12 @@ const ShopNavigator = createStackNavigator(
       headerStyle: {
         backgroundColor: Platform.OS === 'android' ? COLORS.accent : COLORS.primary,
       },
+      headerTitleStyle: {
+        fontFamily: 'montserrat-bold',
+      },
+      headerBackTitleStyle: {
+        fontFamily: 'montserrat-light',
+      },
     },
   }
 );
