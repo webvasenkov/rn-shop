@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, TouchableNativeFeedback, Platform } from 'react-native';
 import { COLORS } from '../../constants/styles';
-import TitleText from '../text/TitleText';
-import IconButton from '../IconButton';
-import OverlayImage from '../OverlayImage';
+import TitleText from '../UI/TitleText';
+import IconButton from '../UI/IconButton';
+import OverlayImage from '../UI/OverlayImage';
 
 const ProductItem = ({ title, imageUrl, price, onMore, onAddToCart }) => {
   let TouchableCmp = TouchableOpacity;
@@ -24,10 +24,10 @@ const ProductItem = ({ title, imageUrl, price, onMore, onAddToCart }) => {
               </OverlayImage>
             </View>
             <View style={styles.buttonsContainer}>
-              <IconButton onPress={onAddToCart} dataIcon={{ name: 'cart-outline' }} isGhost>
+              <IconButton onPress={onAddToCart} dataIcon={{ name: 'cart-outline' }}>
                 Add To Cart
               </IconButton>
-              <IconButton onPress={onMore} dataIcon={{ name: 'eye-outline' }}>
+              <IconButton onPress={onMore} dataIcon={{ name: 'eye-outline' }} isGhost>
                 More
               </IconButton>
             </View>

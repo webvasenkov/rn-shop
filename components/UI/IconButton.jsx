@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../constants/styles';
-import BodyText from '../components/text/BodyText';
+import { COLORS } from '../../constants/styles';
+import BodyText from './BodyText';
 
 const IconButton = ({ children, style, dataIcon, dataText, styleIcon, styleText, isGhost, ...restProps }) => {
   const styleButton = [styles.container, style];

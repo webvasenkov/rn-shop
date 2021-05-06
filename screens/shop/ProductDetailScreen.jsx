@@ -1,18 +1,25 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { View, StyleSheet } from 'react-native';
-import TitleText from '../../components/text/TitleText';
-import BodyText from '../../components/text/BodyText';
-import OverlayImage from '../../components/OverlayImage';
-import IconButton from '../../components/IconButton';
+import { useSelector, useDispatch } from 'react-redux';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import TitleText from '../../components/UI/TitleText';
+import BodyText from '../../components/UI/BodyText';
+import OverlayImage from '../../components/UI/OverlayImage';
+import IconButton from '../../components/UI/IconButton';
+import { addToCart } from '../../store/reducers/cartReducer';
 
 const ProductDetailScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const products = useSelector((state) => state.products.all);
   const productId = navigation.getParam('productId');
-  const { title, imageUrl, description, price } = products.find(({ id }) => id === productId);
+  const productItem = products.find(({ id }) => id === productId);
+  const { title, imageUrl, description, price } = productItem;
+
+  const handleAddToCart = () => {
+    dispatch(addToCart(productItem));
+  };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.imageContainer}>
         <OverlayImage source={{ uri: imageUrl }} overlayStyle={styles.overlay}>
           <TitleText style={styles.text}>{title}</TitleText>
@@ -21,15 +28,11 @@ const ProductDetailScreen = ({ navigation }) => {
       </View>
       <View style={styles.descriptionContainer}>
         <BodyText>{description}</BodyText>
-        <IconButton
-          onPress={() => navigation.navigate('Cart')}
-          dataIcon={{ name: 'cart-outline' }}
-          style={styles.button}
-        >
+        <IconButton onPress={handleAddToCart} dataIcon={{ name: 'cart-outline' }} style={styles.button}>
           Add To Cart
         </IconButton>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
