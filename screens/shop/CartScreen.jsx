@@ -1,27 +1,49 @@
+// @ts-nocheck
 import React from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { ScrollView, View, StyleSheet, FlatList } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeFromCart } from '../../store/reducers/cartReducer';
+import { addOrder } from '../../store/reducers/orderReducer';
 import CartItem from '../../components/shop/CartItem';
 import TitleText from '../../components/UI/TitleText';
+import Card from '../../components/UI/Card';
+import BodyText from '../../components/UI/BodyText';
 import IconButton from '../../components/UI/IconButton';
 
 const CartScreen = () => {
-  const cartState = useSelector((state) => state.cart);
-  const cartItems = Object.keys(cartState.items).map((key) => ({ key, ...cartState.items[key] }));
+  const dispatch = useDispatch();
+  const { items, totalAmount } = useSelector((state) => state.cart);
+  const cartItems = Object.keys(items)
+    .map((key) => ({ key, ...items[key] }))
+    .sort((a, b) => (a.key < b.key ? -1 : 1));
 
-  console.log(cartItems);
+  const cartItem = ({ item }) => (
+    <CartItem
+      title={item.titleProduct}
+      quantity={item.quantity}
+      sum={item.sum}
+      onRemove={() => dispatch(removeFromCart(item.key))}
+      deletable
+    />
+  );
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.totalContainer}>
-          <TitleText>Total: $ {cartState.totalAmount}</TitleText>
-          <IconButton dataIcon={{ name: 'wallet-outline' }}>Order now</IconButton>
+          <TitleText>Total: $ {totalAmount}</TitleText>
+          <IconButton onPress={() => dispatch(addOrder(totalAmount, cartItems))} dataIcon={{ name: 'wallet-outline' }}>
+            Order now
+          </IconButton>
         </View>
-        <View style={styles.cartContainer}>
-          {cartItems.map((item) => (
-            <CartItem title={item.titleProduct} quantity={item.quantity} sum={item.sum} />
-          ))}
-        </View>
+
+        {cartItems.length ? (
+          <Card style={styles.cartContainer} pad={15}>
+            <FlatList keyExtractor={(item) => item.key} data={cartItems} renderItem={cartItem} />
+          </Card>
+        ) : (
+          <BodyText style={styles.textStub}>Cart is empty</BodyText>
+        )}
       </View>
     </ScrollView>
   );
@@ -31,22 +53,19 @@ export default CartScreen;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
     flex: 1,
     padding: 15,
   },
   cartContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginTop: 15,
-    padding: 15,
-    backgroundColor: '#fff',
-    borderRadius: 7.5,
   },
   totalContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  textStub: {
+    marginTop: 15,
+    textAlign: 'center',
   },
 });

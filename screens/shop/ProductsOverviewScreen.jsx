@@ -32,6 +32,11 @@ const ProductsOverviewScreen = ({ navigation }) => {
 };
 
 ProductsOverviewScreen.navigationOptions = ({ navigation }) => ({
+  headerLeft: () => (
+    <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+      <Item title='Menu' iconName='menu-outline' onPress={navigation.toggleDrawer} />
+    </HeaderButtons>
+  ),
   headerRight: () => (
     <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
       <Item title='Cart' iconName='cart-outline' onPress={() => navigation.navigate('Cart')} />

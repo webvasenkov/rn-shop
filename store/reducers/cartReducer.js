@@ -1,6 +1,8 @@
 import { CartItem } from '../../models/cart-item';
+import { ADD_ORDER } from './orderReducer';
 
 const ADD_TO_CART = 'RN-SHOP/CART-REDUCER/ADD-TO-CART';
+const REMOVE_FROM_CART = 'RN-SHOP/CART-REDUCER/REMOVE-FROM-CART';
 
 const initialState = {
   items: {},
@@ -26,6 +28,24 @@ const cartReducer = (state = initialState, action) => {
         items: { ...state.items, [addedProduct.id]: updateOrNewProduct },
         totalAmount: state.totalAmount + price,
       };
+    case REMOVE_FROM_CART:
+      const currentItem = state.items[action.pid];
+      let updatedItems;
+      if (currentItem && currentItem.quantity > 1) {
+        const updateItem = {
+          ...currentItem,
+          quantity: currentItem.quantity - 1,
+          sum: currentItem.sum - currentItem.priceProduct,
+        };
+
+        updatedItems = { ...state.items, [action.pid]: updateItem };
+      } else {
+        updatedItems = { ...state.items };
+        delete updatedItems[action.pid];
+      }
+      return { ...state, items: updatedItems, totalAmount: state.totalAmount - currentItem.priceProduct };
+    case ADD_ORDER:
+      return initialState;
     default:
       return state;
   }
@@ -37,4 +57,9 @@ export default cartReducer;
 export const addToCart = (product) => ({
   type: ADD_TO_CART,
   product,
+});
+
+export const removeFromCart = (productId) => ({
+  type: REMOVE_FROM_CART,
+  pid: productId,
 });

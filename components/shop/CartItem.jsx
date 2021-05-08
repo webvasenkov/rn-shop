@@ -1,16 +1,21 @@
+// @ts-nocheck
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import TitleText from '../UI/TitleText';
-import BodyText from '../UI/BodyText';
 
-const CartItem = ({ title, quantity, sum }) => {
+const CartItem = ({ title, quantity, sum, onRemove, deletable }) => {
+  const sumQuantity = `$ ${sum} / ${quantity}`;
+
   return (
     <View style={styles.container}>
-      <View style={styles.info}>
-        <TitleText numberOfLines={1}>{title}</TitleText>
-        <BodyText>$ {sum}</BodyText>
+      <View style={styles.infoContainer}>
+        <TitleText numberOfLines={1} style={styles.title}>
+          {title}
+        </TitleText>
+        <TitleText>{sumQuantity}</TitleText>
       </View>
-      <TitleText>{quantity}</TitleText>
+      {deletable && <Ionicons style={styles.btnRemove} name='close-circle-outline' size={26} onPress={onRemove} />}
     </View>
   );
 };
@@ -19,13 +24,16 @@ export default CartItem;
 
 const styles = StyleSheet.create({
   container: {
-    margin: 15,
+    flex: 1,
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    width: '100%',
+    marginVertical: 15,
   },
-  info: {
-    width: '60%',
+  infoContainer: {
+    flex: 1,
+  },
+  btnRemove: {
+    marginLeft: 30,
   },
 });

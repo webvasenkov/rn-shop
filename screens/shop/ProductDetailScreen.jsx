@@ -1,11 +1,13 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { View, ScrollView, StyleSheet } from 'react-native';
+import { addToCart } from '../../store/reducers/cartReducer';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import TitleText from '../../components/UI/TitleText';
 import BodyText from '../../components/UI/BodyText';
 import OverlayImage from '../../components/UI/OverlayImage';
 import IconButton from '../../components/UI/IconButton';
-import { addToCart } from '../../store/reducers/cartReducer';
 
 const ProductDetailScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -40,6 +42,11 @@ export default ProductDetailScreen;
 
 ProductDetailScreen.navigationOptions = ({ navigation }) => ({
   headerTitle: navigation.getParam('productTitle'),
+  headerRight: () => (
+    <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+      <Item title='Cart' iconName='cart-outline' onPress={() => navigation.navigate('Cart')} />
+    </HeaderButtons>
+  ),
 });
 
 const styles = StyleSheet.create({
