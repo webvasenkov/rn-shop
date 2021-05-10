@@ -8,7 +8,7 @@ export const PRODUCTS = [
     'SESHSKULL EMBROIDERED UNCUFFED BEANIE',
     'https://assets.bigcartel.com/product_images/297783876/beanies.jpg',
     'Seshskull Embroidered Uncuffed Beanie ..8" Available in BLACK, DARK GREY, ORANGE,PURPLE, MAROON, PINK, TAN, SAFETY YELLOW Embroidered Seshskull logo designed by Tyrus Creek',
-    25.0
+    24.99
   ),
   new Product(
     'p2',
@@ -16,7 +16,7 @@ export const PRODUCTS = [
     'BURDEN FULL ZIP HOODIE',
     'https://assets.bigcartel.com/product_images/297762687/burdenhooodie.jpg',
     'Burden over print Zip hoodie available in Charcoal Grey',
-    45.0
+    39.99
   ),
   new Product(
     'p3',
@@ -24,7 +24,7 @@ export const PRODUCTS = [
     '"PUSHINGUPDAISIES" SHORT SLEEVE',
     'https://assets.bigcartel.com/product_images/300119679/pushingupdaisiestee.jpg',
     '"PUSHINGUPDAISIES" BONES/DEERGOD Promotional Piece Washed Pigment Charcoal shirt Designed by Tyrus Creek',
-    30.0
+    29.99
   ),
   new Product(
     'p4',
@@ -32,7 +32,7 @@ export const PRODUCTS = [
     'DEBUG_MANKIND SHORT SLEEVE',
     'https://assets.bigcartel.com/product_images/298133232/Screen+Shot+2021-03-07+at+3.25.25+PM.jpeg',
     'drip133 piece washed pigment Charcoal shirt Designed by Nat King',
-    30.0
+    29.99
   ),
   new Product(
     'p5',
@@ -40,6 +40,6 @@ export const PRODUCTS = [
     'KIDS SESHSKULL HAT',
     'https://assets.bigcartel.com/product_images/266481140/kidshatsfull.png',
     'KIDS embroidered Seshskull hat Size fit: 6 1/2" - 7 1/4"...available in PINK, BLACK, Light Blue or ORANGE',
-    30.0
+    29.99
   ),
 ];

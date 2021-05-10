@@ -9,6 +9,7 @@ import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
 import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
+import UserProductsScreen from '../screens/user/UserProductsScreen';
 
 const defaultNavigationOptions = {
   headerTintColor: Platform.OS === 'android' ? COLORS.primary : COLORS.accent,
@@ -47,15 +48,30 @@ const OrdersNavigator = createStackNavigator(
   }
 );
 
+const UserProductsNavigator = createStackNavigator(
+  {
+    UserProducts: UserProductsScreen,
+  },
+  {
+    defaultNavigationOptions,
+    navigationOptions: {
+      drawerLabel: 'User Products',
+      drawerIcon: ({ tintColor }) => <Ionicons name='person-circle-outline' size={21} color={tintColor} />,
+    },
+  }
+);
+
 const ShopNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
     Orders: OrdersNavigator,
+    UserProducts: UserProductsNavigator,
   },
   {
     contentOptions: {
       activeTintColor: COLORS.accent,
     },
+    hideStatusBar: true,
   }
 );
 

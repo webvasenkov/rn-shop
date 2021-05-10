@@ -3,6 +3,7 @@ import React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { costRound } from '../../util/number';
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import OrderItem from '../../components/shop/OrderItem';
 import TitleText from '../../components/UI/TitleText';
@@ -15,7 +16,7 @@ const OrdersScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TitleText>Total: $ {totalAmount}</TitleText>
+      <TitleText>Total: $ {costRound(totalAmount)}</TitleText>
       <FlatList keyExtractor={(item) => item.id} data={orders} renderItem={orderItem} />
     </View>
   );

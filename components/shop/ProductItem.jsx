@@ -1,31 +1,24 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { COLORS } from '../../constants/styles';
+import { costRound } from '../../util/number';
 import Card from '../UI/Card';
 import Touchable from '../UI/Touchable';
 import TitleText from '../UI/TitleText';
-import IconButton from '../UI/IconButton';
 import OverlayImage from '../UI/OverlayImage';
 
-const ProductItem = ({ title, imageUrl, price, onMore, onAddToCart }) => {
+const ProductItem = ({ title, imageUrl, price, onSelect, children }) => {
   return (
     <Card style={styles.shadowContainer}>
-      <Touchable onPress={onMore} useForeground>
+      <Touchable onPress={onSelect} useForeground>
         <View style={styles.cardContainer}>
           <View style={styles.imageContainer}>
             <OverlayImage source={{ uri: imageUrl }} overlayStyle={styles.overlay}>
               <TitleText style={styles.text}>{title}</TitleText>
-              <TitleText style={[styles.text, styles.price]}>$ {price}</TitleText>
+              <TitleText style={[styles.text, styles.price]}>$ {costRound(price)}</TitleText>
             </OverlayImage>
           </View>
-          <View style={styles.buttonsContainer}>
-            <IconButton onPress={onAddToCart} dataIcon={{ name: 'cart-outline' }}>
-              Add To Cart
-            </IconButton>
-            <IconButton onPress={onMore} dataIcon={{ name: 'eye-outline' }} isGhost>
-              More
-            </IconButton>
-          </View>
+          <View style={styles.buttonsContainer}>{children}</View>
         </View>
       </Touchable>
     </Card>

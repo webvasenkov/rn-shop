@@ -2,10 +2,11 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { costRound } from '../../util/number';
 import TitleText from '../UI/TitleText';
 
 const CartItem = ({ title, quantity, sum, onRemove, deletable }) => {
-  const sumQuantity = `$ ${sum} / ${quantity}`;
+  const sumQuantity = `$ ${costRound(sum)} / ${quantity}`;
 
   return (
     <View style={styles.container}>

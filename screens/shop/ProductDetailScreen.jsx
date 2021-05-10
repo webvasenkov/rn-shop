@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { addToCart } from '../../store/reducers/cartReducer';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { costRound } from '../../util/number';
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import TitleText from '../../components/UI/TitleText';
 import BodyText from '../../components/UI/BodyText';
@@ -25,7 +26,7 @@ const ProductDetailScreen = ({ navigation }) => {
       <View style={styles.imageContainer}>
         <OverlayImage source={{ uri: imageUrl }} overlayStyle={styles.overlay}>
           <TitleText style={styles.text}>{title}</TitleText>
-          <TitleText style={[styles.text, styles.price]}>$ {price}</TitleText>
+          <TitleText style={[styles.text, styles.price]}>$ {costRound(price)}</TitleText>
         </OverlayImage>
       </View>
       <View style={styles.descriptionContainer}>

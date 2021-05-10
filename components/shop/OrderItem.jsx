@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import { costRound } from '../../util/number';
 import CartItem from '../shop/CartItem';
 import Card from '../UI/Card';
 import TitleText from '../UI/TitleText';
@@ -12,7 +13,7 @@ const OrderItem = ({ amount, date, cartItems }) => {
   return (
     <Card style={styles.container} pad={15}>
       <View style={styles.header}>
-        <TitleText>Total: $ {amount}</TitleText>
+        <TitleText>Total: $ {costRound(amount)}</TitleText>
         <TitleText>{date}</TitleText>
       </View>
       <IconButton

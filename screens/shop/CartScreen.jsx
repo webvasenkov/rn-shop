@@ -4,6 +4,7 @@ import { ScrollView, View, StyleSheet, FlatList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart } from '../../store/reducers/cartReducer';
 import { addOrder } from '../../store/reducers/orderReducer';
+import { costRound } from '../../util/number';
 import CartItem from '../../components/shop/CartItem';
 import TitleText from '../../components/UI/TitleText';
 import Card from '../../components/UI/Card';
@@ -31,7 +32,7 @@ const CartScreen = () => {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.totalContainer}>
-          <TitleText>Total: $ {totalAmount}</TitleText>
+          <TitleText>Total: $ {costRound(totalAmount)}</TitleText>
           <IconButton onPress={() => dispatch(addOrder(totalAmount, cartItems))} dataIcon={{ name: 'wallet-outline' }}>
             Order now
           </IconButton>
