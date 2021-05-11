@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
   infoContainer: {
     flex: 1,
   },
+  title: {
+    textTransform: 'uppercase',
+  },
   btnRemove: {
     marginLeft: 30,
   },

@@ -10,6 +10,7 @@ import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
 import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
 import UserProductsScreen from '../screens/user/UserProductsScreen';
+import EditProductScreen from '../screens/user/EditProductScreen';
 
 const defaultNavigationOptions = {
   headerTintColor: Platform.OS === 'android' ? COLORS.primary : COLORS.accent,
@@ -51,6 +52,7 @@ const OrdersNavigator = createStackNavigator(
 const UserProductsNavigator = createStackNavigator(
   {
     UserProducts: UserProductsScreen,
+    EditProduct: EditProductScreen,
   },
   {
     defaultNavigationOptions,

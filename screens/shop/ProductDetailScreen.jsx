@@ -25,7 +25,7 @@ const ProductDetailScreen = ({ navigation }) => {
     <ScrollView style={styles.container}>
       <View style={styles.imageContainer}>
         <OverlayImage source={{ uri: imageUrl }} overlayStyle={styles.overlay}>
-          <TitleText style={styles.text}>{title}</TitleText>
+          <TitleText style={[styles.text, styles.title]}>{title}</TitleText>
           <TitleText style={[styles.text, styles.price]}>$ {costRound(price)}</TitleText>
         </OverlayImage>
       </View>
@@ -60,6 +60,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
+  },
+  title: {
+    textTransform: 'uppercase',
   },
   price: {
     alignSelf: 'flex-end',
