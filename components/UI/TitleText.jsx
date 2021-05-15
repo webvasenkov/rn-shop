@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
-import { COLORS } from '../../constants/styles';
+import { color } from '../../utils/styleGuide';
 
 const TitleText = ({ children, style, ...restProps }) => {
   return (
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     fontFamily: 'montserrat-bold',
-    color: COLORS.accent,
+    color: color.accent,
     includeFontPadding: false,
     textAlignVertical: 'center',
   },

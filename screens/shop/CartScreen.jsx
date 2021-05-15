@@ -4,7 +4,7 @@ import { ScrollView, View, StyleSheet, FlatList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart } from '../../store/reducers/cartReducer';
 import { addOrder } from '../../store/reducers/orderReducer';
-import { costRound } from '../../util/number';
+import { costRound } from '../../utils/number';
 import CartItem from '../../components/shop/CartItem';
 import TitleText from '../../components/UI/TitleText';
 import Card from '../../components/UI/Card';

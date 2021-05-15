@@ -3,7 +3,7 @@ import React from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { costRound } from '../../util/number';
+import { costRound } from '../../utils/number';
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import OrderItem from '../../components/shop/OrderItem';
 import TitleText from '../../components/UI/TitleText';

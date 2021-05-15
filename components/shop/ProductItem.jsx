@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { COLORS } from '../../constants/styles';
-import { costRound } from '../../util/number';
+import { color } from '../../utils/styleGuide';
+import { costRound } from '../../utils/number';
 import Card from '../UI/Card';
 import Touchable from '../UI/Touchable';
 import TitleText from '../UI/TitleText';
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   cardContainer: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: color.primary,
     borderRadius: 7.5,
   },
   imageContainer: {
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   text: {
-    color: COLORS.primary,
+    color: color.primary,
   },
   title: {
     textTransform: 'uppercase',

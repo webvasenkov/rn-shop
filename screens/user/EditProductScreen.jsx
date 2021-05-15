@@ -1,59 +1,126 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
-import { COLORS } from '../../constants/styles';
+// @ts-nocheck
+import React, { useEffect, useCallback, useReducer } from 'react';
+import { StyleSheet, Alert } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 import { addProduct, updateProduct } from '../../store/reducers/productsReducer';
+import Input from '../../components/UI/Input';
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import Card from '../../components/UI/Card';
-import BodyText from '../../components/UI/BodyText';
+
+const FORM_INPUT_UPDATE = 'FORM-INPUT-UPDATE';
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updateValues = { ...state.inputValues, [action.input]: action.value };
+    const updateValidities = { ...state.inputValidities, [action.input]: action.isValid };
+
+    let formUpdateIsValid = true;
+    for (const key in updateValidities) {
+      console.log(key, updateValidities[key]);
+      formUpdateIsValid = formUpdateIsValid && updateValidities[key];
+    }
+
+    return { inputValues: updateValues, inputValidities: updateValidities, formIsValid: formUpdateIsValid };
+  }
+
+  return state;
+};
 
 const EditProductScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const productId = navigation.getParam('productId');
   const editProduct = useSelector((state) => state.products.user.find((product) => product.id === productId));
-  const [title, setTitle] = useState(editProduct?.title ?? '');
-  const [description, setDescription] = useState(editProduct?.description ?? '');
-  const [imageUrl, setImageUrl] = useState(editProduct?.imageUrl ?? '');
-  const [price, setPrice] = useState('');
+
+  const initialState = {
+    inputValues: {
+      title: editProduct?.title ?? '',
+      description: editProduct?.description ?? '',
+      imageUrl: editProduct?.imageUrl ?? '',
+      price: '',
+    },
+    inputValidities: {
+      title: !!editProduct,
+      description: !!editProduct,
+      imageUrl: !!editProduct,
+      price: !!editProduct,
+    },
+    formIsValid: !!editProduct,
+  };
+
+  const [formState, dispatchFormState] = useReducer(formReducer, initialState);
+  const { inputValues, formIsValid } = formState;
 
   const handleSubmit = useCallback(() => {
+    if (!formIsValid) {
+      Alert.alert('Something went wrong!', 'Please check errors in form', [{ text: 'Okay' }]);
+      return;
+    }
     if (editProduct) {
-      dispatch(updateProduct(productId, title, imageUrl, description));
+      dispatch(updateProduct(productId, inputValues.title, inputValues.imageUrl, inputValues.description));
     } else {
-      dispatch(addProduct(title, imageUrl, description, price));
+      dispatch(addProduct(inputValues.title, inputValues.imageUrl, inputValues.description, inputValues.price));
     }
     navigation.goBack();
-  }, [dispatch, productId, title, imageUrl, description, price]);
+  }, [dispatch, productId, formState]);
 
   useEffect(() => {
     navigation.setParams({ submit: handleSubmit });
   }, [handleSubmit]);
 
+  const onInputChange = useCallback(
+    (id, text, isValid) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: text,
+        isValid,
+        input: id,
+      });
+    },
+    [dispatchFormState]
+  );
+
   return (
     <Card style={styles.form}>
-      <View style={styles.field}>
-        <BodyText>Title</BodyText>
-        <TextInput style={styles.input} value={title} onChangeText={(text) => setTitle(text)} />
-      </View>
-      <View style={styles.field}>
-        <BodyText>Description</BodyText>
-        <TextInput style={styles.input} value={description} onChangeText={(text) => setDescription(text)} />
-      </View>
-      <View style={styles.field}>
-        <BodyText>Image URL</BodyText>
-        <TextInput style={styles.input} value={imageUrl} onChangeText={(text) => setImageUrl(text)} />
-      </View>
+      <Input
+        id='title'
+        label='Title'
+        wrongText='Please check your title'
+        onInputChange={onInputChange}
+        initialValue={initialState.inputValues.title}
+        initialValidate={initialState.inputValidities.title}
+        required
+      />
+      <Input
+        id='description'
+        label='Description'
+        wrongText='Please check your description'
+        onInputChange={onInputChange}
+        initialValue={initialState.inputValues.description}
+        initialValidate={initialState.inputValidities.description}
+        required
+      />
+      <Input
+        id='imageUrl'
+        label='Image URL'
+        wrongText='Please check your image url'
+        onInputChange={onInputChange}
+        initialValue={initialState.inputValues.imageUrl}
+        initialValidate={initialState.inputValidities.imageUrl}
+        required
+      />
       {!editProduct && (
-        <View style={styles.field}>
-          <BodyText>Price</BodyText>
-          <TextInput
-            style={styles.input}
-            keyboardType='numeric'
-            value={price}
-            onChangeText={(text) => setPrice(text)}
-          />
-        </View>
+        <Input
+          id='price'
+          label='Price'
+          wrongText='Please check your image url'
+          required
+          onInputChange={onInputChange}
+          initialValue={initialState.inputValues.price}
+          initialValidate={initialState.inputValidities.price}
+          keyboardType='decimal-pad'
+          required
+        />
       )}
     </Card>
   );
@@ -78,13 +145,5 @@ const styles = StyleSheet.create({
     margin: 15,
     paddingTop: 15,
     paddingHorizontal: 15,
-  },
-  field: {
-    marginBottom: 15,
-  },
-  input: {
-    marginTop: 7.5,
-    borderBottomWidth: 1,
-    borderColor: COLORS.accent,
   },
 });

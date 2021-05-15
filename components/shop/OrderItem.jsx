@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { costRound } from '../../util/number';
+import { costRound } from '../../utils/number';
 import CartItem from '../shop/CartItem';
 import Card from '../UI/Card';
 import TitleText from '../UI/TitleText';

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { addToCart } from '../../store/reducers/cartReducer';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { costRound } from '../../util/number';
+import { costRound } from '../../utils/number';
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import TitleText from '../../components/UI/TitleText';
 import BodyText from '../../components/UI/BodyText';

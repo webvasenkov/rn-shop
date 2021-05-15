@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { costRound } from '../../util/number';
+import { costRound } from '../../utils/number';
 import TitleText from '../UI/TitleText';
 
 const CartItem = ({ title, quantity, sum, onRemove, deletable }) => {

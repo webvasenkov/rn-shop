@@ -3,7 +3,7 @@ import { createAppContainer } from 'react-navigation';
 import { Platform } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
-import { COLORS } from '../constants/styles';
+import { color } from '../utils/styleGuide';
 import { Ionicons } from '@expo/vector-icons';
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
@@ -13,9 +13,9 @@ import UserProductsScreen from '../screens/user/UserProductsScreen';
 import EditProductScreen from '../screens/user/EditProductScreen';
 
 const defaultNavigationOptions = {
-  headerTintColor: Platform.OS === 'android' ? COLORS.primary : COLORS.accent,
+  headerTintColor: Platform.OS === 'android' ? color.primary : color.accent,
   headerStyle: {
-    backgroundColor: Platform.OS === 'android' ? COLORS.accent : COLORS.primary,
+    backgroundColor: Platform.OS === 'android' ? color.accent : color.primary,
   },
   headerTitleStyle: {
     fontFamily: 'montserrat-bold',
@@ -71,7 +71,7 @@ const ShopNavigator = createDrawerNavigator(
   },
   {
     contentOptions: {
-      activeTintColor: COLORS.accent,
+      activeTintColor: color.accent,
     },
     hideStatusBar: true,
   }
