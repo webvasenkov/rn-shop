@@ -1,12 +1,13 @@
 // @ts-nocheck
-import React, { useEffect, useCallback, useReducer } from 'react';
-import { StyleSheet, Alert } from 'react-native';
+import React, { useState, useEffect, useCallback, useReducer } from 'react';
+import { StyleSheet, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 import { addProduct, updateProduct } from '../../store/reducers/productsReducer';
 import Input from '../../components/UI/Input';
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import Card from '../../components/UI/Card';
+import Preloader from '../../components/UI/Preloader';
 
 const FORM_INPUT_UPDATE = 'FORM-INPUT-UPDATE';
 
@@ -16,10 +17,7 @@ const formReducer = (state, action) => {
     const updateValidities = { ...state.inputValidities, [action.input]: action.isValid };
 
     let formUpdateIsValid = true;
-    for (const key in updateValidities) {
-      console.log(key, updateValidities[key]);
-      formUpdateIsValid = formUpdateIsValid && updateValidities[key];
-    }
+    for (const key in updateValidities) formUpdateIsValid = formUpdateIsValid && updateValidities[key];
 
     return { inputValues: updateValues, inputValidities: updateValidities, formIsValid: formUpdateIsValid };
   }
@@ -28,6 +26,8 @@ const formReducer = (state, action) => {
 };
 
 const EditProductScreen = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
   const productId = navigation.getParam('productId');
   const editProduct = useSelector((state) => state.products.user.find((product) => product.id === productId));
@@ -51,17 +51,25 @@ const EditProductScreen = ({ navigation }) => {
   const [formState, dispatchFormState] = useReducer(formReducer, initialState);
   const { inputValues, formIsValid } = formState;
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
     if (!formIsValid) {
       Alert.alert('Something went wrong!', 'Please check errors in form', [{ text: 'Okay' }]);
       return;
     }
-    if (editProduct) {
-      dispatch(updateProduct(productId, inputValues.title, inputValues.imageUrl, inputValues.description));
-    } else {
-      dispatch(addProduct(inputValues.title, inputValues.imageUrl, inputValues.description, inputValues.price));
+    setIsLoading(true);
+
+    try {
+      if (editProduct) {
+        await dispatch(updateProduct(productId, inputValues.title, inputValues.imageUrl, inputValues.description));
+      } else {
+        await dispatch(addProduct(inputValues.title, inputValues.imageUrl, inputValues.description, inputValues.price));
+      }
+      navigation.goBack();
+    } catch (err) {
+      setError(err.message);
     }
-    navigation.goBack();
+
+    setIsLoading(false);
   }, [dispatch, productId, formState]);
 
   useEffect(() => {
@@ -80,49 +88,63 @@ const EditProductScreen = ({ navigation }) => {
     [dispatchFormState]
   );
 
+  if (isLoading) return <Preloader />;
+
   return (
-    <Card style={styles.form}>
-      <Input
-        id='title'
-        label='Title'
-        wrongText='Please check your title'
-        onInputChange={onInputChange}
-        initialValue={initialState.inputValues.title}
-        initialValidate={initialState.inputValidities.title}
-        required
-      />
-      <Input
-        id='description'
-        label='Description'
-        wrongText='Please check your description'
-        onInputChange={onInputChange}
-        initialValue={initialState.inputValues.description}
-        initialValidate={initialState.inputValidities.description}
-        required
-      />
-      <Input
-        id='imageUrl'
-        label='Image URL'
-        wrongText='Please check your image url'
-        onInputChange={onInputChange}
-        initialValue={initialState.inputValues.imageUrl}
-        initialValidate={initialState.inputValidities.imageUrl}
-        required
-      />
-      {!editProduct && (
-        <Input
-          id='price'
-          label='Price'
-          wrongText='Please check your image url'
-          required
-          onInputChange={onInputChange}
-          initialValue={initialState.inputValues.price}
-          initialValidate={initialState.inputValidities.price}
-          keyboardType='decimal-pad'
-          required
-        />
-      )}
-    </Card>
+    <KeyboardAvoidingView style={styles.container} behavior='height' keyboardVerticalOffset={100}>
+      <ScrollView>
+        <Card style={styles.form}>
+          <Input
+            id='title'
+            label='Title'
+            placeholder='Enter title...'
+            wrongText='Please check your title'
+            onInputChange={onInputChange}
+            initialValue={initialState.inputValues.title}
+            initialValidate={initialState.inputValidities.title}
+            required
+          />
+          <Input
+            id='description'
+            label='Description'
+            placeholder='Enter description...'
+            wrongText='Please check your description'
+            onInputChange={onInputChange}
+            initialValue={initialState.inputValues.description}
+            initialValidate={initialState.inputValidities.description}
+            multiline
+            numberOfLines={3}
+            textAlignVertical='top'
+            required
+          />
+          <Input
+            id='imageUrl'
+            label='Image URL'
+            placeholder='Enter image url...'
+            wrongText='Please check your image url'
+            onInputChange={onInputChange}
+            initialValue={initialState.inputValues.imageUrl}
+            initialValidate={initialState.inputValidities.imageUrl}
+            required
+          />
+          {!editProduct && (
+            <Input
+              id='price'
+              label='Price'
+              placeholder='Enter price...'
+              wrongText='Please check your price'
+              required
+              onInputChange={onInputChange}
+              initialValue={initialState.inputValues.price}
+              initialValidate={initialState.inputValidities.price}
+              keyboardType='decimal-pad'
+              required
+              min={0.5}
+            />
+          )}
+        </Card>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -141,6 +163,9 @@ EditProductScreen.navigationOptions = ({ navigation }) => {
 export default EditProductScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   form: {
     margin: 15,
     paddingTop: 15,

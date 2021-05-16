@@ -10,14 +10,17 @@ import ProductItem from '../../components/shop/ProductItem';
 const UserProductsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const userProducts = useSelector((state) => state.products.user);
+
   const handleDeleteItem = (id) => {
     Alert.alert('Are you sure?', 'Delete product permanently', [
       { text: 'No', style: 'cancel' },
       { text: 'Yes', style: 'default', onPress: () => dispatch(deleteProduct(id)) },
     ]);
   };
+
   const handleEditItem = (id) => navigation.navigate('EditProduct', { productId: id });
   const handleSelectItem = (id, title) => navigation.navigate('ProductDetail', { productId: id, productTitle: title });
+
   const productItem = ({ item }) => (
     <ProductItem
       title={item.title}
@@ -33,6 +36,7 @@ const UserProductsScreen = ({ navigation }) => {
       </IconButton>
     </ProductItem>
   );
+
   return <FlatList keyExtractor={(item) => item.id} data={userProducts} renderItem={productItem} />;
 };
 

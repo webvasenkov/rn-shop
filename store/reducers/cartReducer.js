@@ -2,8 +2,8 @@ import { CartItem } from '../../models/cart-item';
 import { ADD_ORDER } from './orderReducer';
 import { DELETE_PRODUCT } from './productsReducer';
 
-const ADD_TO_CART = 'RN-SHOP/CART-REDUCER/ADD-TO-CART';
-const REMOVE_FROM_CART = 'RN-SHOP/CART-REDUCER/REMOVE-FROM-CART';
+const ADD_TO_CART = 'rn-shop/card-reducer/ADD-TO-CART';
+const REMOVE_FROM_CART = 'rn-shop/cart-reducer/REMOVE-FROM-CART';
 
 const initialState = {
   items: {},

@@ -2,7 +2,7 @@
 import React, { useReducer, useEffect } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { color } from '../../utils/styleGuide';
-import TitleText from './BodyText';
+import TitleText from './TitleText';
 import BodyText from './BodyText';
 
 const INPUT_UPDATE = 'INPUT_UPDATE';
@@ -77,7 +77,11 @@ const Input = ({
         style={styles.input}
         {...props}
       />
-      {!inputState.isValid && inputState.touched && <BodyText style={styles.wrongText}> {wrongText} </BodyText>}
+      {!inputState.isValid && inputState.touched && (
+        <View style={styles.wrongContainer}>
+          <BodyText style={styles.wrongText}> {wrongText} </BodyText>
+        </View>
+      )}
     </View>
   );
 };
@@ -87,13 +91,21 @@ export default Input;
 const styles = StyleSheet.create({
   field: {
     marginBottom: 15,
+    alignItems: 'flex-start',
   },
   input: {
+    width: '100%',
     marginTop: 7.5,
     borderBottomWidth: 1,
     borderColor: color.accent,
   },
+  wrongContainer: {
+    marginTop: 7.5,
+    backgroundColor: color.error,
+    padding: 3.25,
+    borderRadius: 7.5,
+  },
   wrongText: {
-    marginTop: 3.25,
+    color: color.primary,
   },
 });

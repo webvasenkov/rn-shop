@@ -1,6 +1,6 @@
 import { Order } from '../../models/order';
 
-export const ADD_ORDER = 'RN-SHOP/ORDER-REDUCER/ADD-ORDER';
+export const ADD_ORDER = 'rn-shop/order-reducer/ADD_ORDER';
 
 const initialState = {
   orders: [],
