@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/bin/yarn add redux-devtools-extenstion
+  /usr/bin/node /usr/bin/yarn add react-navigation-switch
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/vd/Android/Sdk/emulator:/home/vd/Android/Sdk/tools:/home/vd/Android/Sdk/tools/bin:/home/vd/Android/Sdk/platform-tools:/home/vd/Android/Sdk/emulator:/home/vd/Android/Sdk/tools:/home/vd/Android/Sdk/tools/bin:/home/vd/Android/Sdk/platform-tools
@@ -8,23 +8,23 @@ Yarn version:
   1.22.10
 
 Node version: 
-  14.16.1
+  14.17.0
 
 Platform: 
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/redux-devtools-extenstion: Not found
+  Error: https://registry.yarnpkg.com/react-navigation-switch: Not found
       at Request.params.callback [as _callback] (/usr/lib/node_modules/yarn/lib/cli.js:66988:18)
       at Request.self.callback (/usr/lib/node_modules/yarn/lib/cli.js:140662:22)
-      at Request.emit (events.js:315:20)
+      at Request.emit (events.js:376:20)
       at Request.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:141634:10)
-      at Request.emit (events.js:315:20)
+      at Request.emit (events.js:376:20)
       at IncomingMessage.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:141556:12)
-      at Object.onceWrapper (events.js:421:28)
-      at IncomingMessage.emit (events.js:327:22)
-      at endReadableNT (internal/streams/readable.js:1327:12)
-      at processTicksAndRejections (internal/process/task_queues.js:80:21)
+      at Object.onceWrapper (events.js:482:28)
+      at IncomingMessage.emit (events.js:388:22)
+      at endReadableNT (internal/streams/readable.js:1336:12)
+      at processTicksAndRejections (internal/process/task_queues.js:82:21)
 
 npm manifest: 
   {
@@ -41,17 +41,22 @@ npm manifest:
       "expo-app-loading": "^1.0.3",
       "expo-font": "~9.1.0",
       "expo-status-bar": "~1.0.4",
+      "moment": "^2.29.1",
       "react": "16.13.1",
       "react-dom": "16.13.1",
       "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
       "react-native-gesture-handler": "~1.10.2",
       "react-native-reanimated": "~2.1.0",
+      "react-native-screens": "^3.1.1",
       "react-native-web": "~0.13.12",
       "react-navigation": "^4.4.4",
-      "react-navigation-header-buttons": "^7.0.1",
+      "react-navigation-drawer": "^2.7.1",
+      "react-navigation-header-buttons": "6",
       "react-navigation-stack": "^2.10.4",
       "react-redux": "^7.2.4",
-      "redux": "^4.1.0"
+      "redux": "^4.1.0",
+      "redux-devtools-extension": "^2.13.9",
+      "redux-thunk": "^2.3.0"
     },
     "devDependencies": {
       "@babel/core": "^7.9.0"
@@ -4798,6 +4803,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/mockdate/-/mockdate-3.0.5.tgz#789be686deb3149e7df2b663d2bc4392bc3284fb"
     integrity sha512-iniQP4rj1FhBdBYS/+eQv7j1tadJ9lJtdzgOpvsOHng/GbcDh2Fhdeq+ZRldrPYdXvCyfFUmFeEwEGXZB5I/AQ==
   
+  moment@^2.29.1:
+    version "2.29.1"
+    resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+    integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+  
   ms@2.0.0:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -5427,6 +5437,11 @@ Lockfile:
     dependencies:
       hoist-non-react-statics "^2.3.1"
   
+  react-native-screens@^3.1.1:
+    version "3.1.1"
+    resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-3.1.1.tgz#2cd4496c5e3ed1ffbaf77962b8fcc10be3af2158"
+    integrity sha512-cjhK85T8LQ7uqqmwvLb8FKNk1RfgJd1jtbUm1lOxUmJreFki5Wh2SUlx0DAvNG35U6quGD15KPYRducGa+M04g==
+  
   react-native-web@~0.13.12:
     version "0.13.18"
     resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.13.18.tgz#964f058a16521a3b9a31b091415edfef5b6ef305"
@@ -5474,10 +5489,15 @@ Lockfile:
       use-subscription "^1.0.0"
       whatwg-fetch "^3.0.0"
   
-  react-navigation-header-buttons@^7.0.1:
-    version "7.0.1"
-    resolved "https://registry.yarnpkg.com/react-navigation-header-buttons/-/react-navigation-header-buttons-7.0.1.tgz#298cba26aa27d9695e1f450e7eb3a175c0c3d2ed"
-    integrity sha512-ggIXhshnRv3Kaqw1ZlZLqMPtBOsLY4FLxxEOCHKe/XuWVfZGPmMqZBC/S4H8cQgIGRyFNOrypXF69Hb7fXMWNg==
+  react-navigation-drawer@^2.7.1:
+    version "2.7.1"
+    resolved "https://registry.yarnpkg.com/react-navigation-drawer/-/react-navigation-drawer-2.7.1.tgz#b025be11f612e8215f15f9f605851d281606fe82"
+    integrity sha512-W36XDl+Ts5uGNr6Ryt1xGrQ5JTeddPmvR31bNX7o6Oo7OsdPZ3b1+oMDoRClGca0d6Ggo7btIqiWUsUshm+p/g==
+  
+  react-navigation-header-buttons@6:
+    version "6.3.1"
+    resolved "https://registry.yarnpkg.com/react-navigation-header-buttons/-/react-navigation-header-buttons-6.3.1.tgz#51b9c9bd67ccbfff6db1ddab92a88be1be46bdae"
+    integrity sha512-D3qVcCm+WOjHWijPWn859LDCZ/TcM0t1ptVm+QDMET2Rvjfgtlq9BRuS/dfJ1D8axWX88qPUTVklqNAPfu4f0g==
     dependencies:
       invariant ">=2"
   
@@ -5540,6 +5560,16 @@ Lockfile:
       safe-buffer "~5.1.1"
       string_decoder "~1.1.1"
       util-deprecate "~1.0.1"
+  
+  redux-devtools-extension@^2.13.9:
+    version "2.13.9"
+    resolved "https://registry.yarnpkg.com/redux-devtools-extension/-/redux-devtools-extension-2.13.9.tgz#6b764e8028b507adcb75a1cae790f71e6be08ae7"
+    integrity sha512-cNJ8Q/EtjhQaZ71c8I9+BPySIBVEKssbPpskBfsXqb8HJ002A3KRVHfeRzwRo6mGPqsm7XuHTqNSNeS1Khig0A==
+  
+  redux-thunk@^2.3.0:
+    version "2.3.0"
+    resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
+    integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
   
   redux@^4.0.0, redux@^4.1.0:
     version "4.1.0"

@@ -10,6 +10,8 @@ import BodyText from '../../components/UI/BodyText';
 import OverlayImage from '../../components/UI/OverlayImage';
 import IconButton from '../../components/UI/IconButton';
 
+const checkAdmin = (navigation) => navigation.state.routeName === 'ProductUserDetail';
+
 const ProductDetailScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.all);
@@ -31,9 +33,11 @@ const ProductDetailScreen = ({ navigation }) => {
       </View>
       <View style={styles.descriptionContainer}>
         <BodyText>{description}</BodyText>
-        <IconButton onPress={handleAddToCart} dataIcon={{ name: 'cart-outline' }} style={styles.button}>
-          Add To Cart
-        </IconButton>
+        {!checkAdmin(navigation) && (
+          <IconButton onPress={handleAddToCart} dataIcon={{ name: 'cart-outline' }} style={styles.button}>
+            Add To Cart
+          </IconButton>
+        )}
       </View>
     </ScrollView>
   );
@@ -43,11 +47,12 @@ export default ProductDetailScreen;
 
 ProductDetailScreen.navigationOptions = ({ navigation }) => ({
   headerTitle: navigation.getParam('productTitle'),
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-      <Item title='Cart' iconName='cart-outline' onPress={() => navigation.navigate('Cart')} />
-    </HeaderButtons>
-  ),
+  headerRight: () =>
+    !checkAdmin(navigation) && (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item title='Cart' iconName='cart-outline' onPress={() => navigation.navigate('Cart')} />
+      </HeaderButtons>
+    ),
 });
 
 const styles = StyleSheet.create({

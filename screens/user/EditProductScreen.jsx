@@ -51,18 +51,25 @@ const EditProductScreen = ({ navigation }) => {
   const [formState, dispatchFormState] = useReducer(formReducer, initialState);
   const { inputValues, formIsValid } = formState;
 
+  useEffect(() => {
+    if (error) Alert.alert('An occurred error', error, [{ text: 'Okay' }]);
+  }, [error]);
+
   const handleSubmit = useCallback(async () => {
     if (!formIsValid) {
       Alert.alert('Something went wrong!', 'Please check errors in form', [{ text: 'Okay' }]);
       return;
     }
+    setError('');
     setIsLoading(true);
 
     try {
       if (editProduct) {
         await dispatch(updateProduct(productId, inputValues.title, inputValues.imageUrl, inputValues.description));
       } else {
-        await dispatch(addProduct(inputValues.title, inputValues.imageUrl, inputValues.description, inputValues.price));
+        await dispatch(
+          addProduct(inputValues.title, inputValues.imageUrl, inputValues.description, +inputValues.price)
+        );
       }
       navigation.goBack();
     } catch (err) {

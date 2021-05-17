@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
-import { ScrollView, View, StyleSheet, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, StyleSheet, FlatList, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromCart } from '../../store/reducers/cartReducer';
 import { addOrder } from '../../store/reducers/orderReducer';
@@ -10,9 +10,12 @@ import TitleText from '../../components/UI/TitleText';
 import Card from '../../components/UI/Card';
 import BodyText from '../../components/UI/BodyText';
 import IconButton from '../../components/UI/IconButton';
+import Preloader from '../../components/UI/Preloader';
 
 const CartScreen = () => {
   const dispatch = useDispatch();
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const { items, totalAmount } = useSelector((state) => state.cart);
   const cartItems = Object.keys(items)
     .map((key) => ({ key, ...items[key] }))
@@ -28,12 +31,31 @@ const CartScreen = () => {
     />
   );
 
+  useEffect(() => {
+    if (error) Alert.alert('An occurred error', error, [{ text: 'Okay' }]);
+  }, [error]);
+
+  const handleCreateOrder = async () => {
+    if (cartItems.length) {
+      setError('');
+      setIsLoading(true);
+      try {
+        await dispatch(addOrder(totalAmount, cartItems));
+      } catch (err) {
+        setError(err.message);
+      }
+      setIsLoading(false);
+    } else Alert.alert('Cart is empty', 'Please add something to the cart', [{ text: 'Okay' }]);
+  };
+
+  if (isLoading) return <Preloader />;
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.totalContainer}>
           <TitleText>Total: $ {costRound(totalAmount)}</TitleText>
-          <IconButton onPress={() => dispatch(addOrder(totalAmount, cartItems))} dataIcon={{ name: 'wallet-outline' }}>
+          <IconButton onPress={handleCreateOrder} dataIcon={{ name: 'wallet-outline' }}>
             Order now
           </IconButton>
         </View>

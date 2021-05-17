@@ -10,22 +10,24 @@ import ProductItem from '../../components/shop/ProductItem';
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import IconButton from '../../components/UI/IconButton';
 import Preloader from '../../components/UI/Preloader';
+import Refresh from '../../components/UI/Refresh';
 
 const ProductsOverviewScreen = ({ navigation }) => {
   const products = useSelector((state) => state.products.all);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState('');
   const dispatch = useDispatch();
 
   const loadProducts = useCallback(async () => {
     setError('');
-    setIsLoading(true);
+    setIsRefreshing(true);
     try {
       await dispatch(setProducts());
     } catch (err) {
       setError(err.message);
     }
-    setIsLoading(false);
+    setIsRefreshing(false);
   }, [dispatch, setIsLoading, setError]);
 
   useEffect(() => {
@@ -34,7 +36,8 @@ const ProductsOverviewScreen = ({ navigation }) => {
   }, [loadProducts]);
 
   useEffect(() => {
-    loadProducts();
+    setIsLoading(true);
+    loadProducts().then(() => setIsLoading(false));
   }, [loadProducts]);
 
   const handleSelectItem = (id, title) => {
@@ -46,7 +49,6 @@ const ProductsOverviewScreen = ({ navigation }) => {
   };
 
   if (isLoading) return <Preloader />;
-
   if (!isLoading && !products.length) {
     return (
       <View style={styles.centredContainer}>
@@ -56,19 +58,7 @@ const ProductsOverviewScreen = ({ navigation }) => {
       </View>
     );
   }
-
-  if (error) {
-    return (
-      <View style={styles.centredContainer}>
-        <Card style={styles.errorCard} pad={15}>
-          <BodyText>Something went wrong!</BodyText>
-          <IconButton style={styles.tryBtn} dataIcon={{ name: 'refresh' }} onPress={loadProducts}>
-            Try Again!
-          </IconButton>
-        </Card>
-      </View>
-    );
-  }
+  if (error) return <Refresh onRefresh={loadProducts} />;
 
   const productItem = ({ item }) => (
     <ProductItem
@@ -86,7 +76,15 @@ const ProductsOverviewScreen = ({ navigation }) => {
     </ProductItem>
   );
 
-  return <FlatList keyExtractor={(item) => item.id} data={products} renderItem={productItem} />;
+  return (
+    <FlatList
+      onRefresh={loadProducts}
+      refreshing={isRefreshing}
+      keyExtractor={(item) => item.id}
+      data={products}
+      renderItem={productItem}
+    />
+  );
 };
 
 ProductsOverviewScreen.navigationOptions = ({ navigation }) => ({
@@ -109,11 +107,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  errorCard: {
-    alignItems: 'center',
-  },
-  tryBtn: {
-    marginTop: 7.5,
   },
 });
