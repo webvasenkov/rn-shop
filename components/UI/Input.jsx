@@ -31,11 +31,14 @@ const Input = ({
   label,
   wrongText,
   required,
+  email,
   onInputChange,
   initialValue,
   initialValidate,
   min,
   max,
+  minLength,
+  maxLength,
   ...props
 }) => {
   const initialState = {
@@ -48,9 +51,16 @@ const Input = ({
 
   const handleChangeText = (text) => {
     let isValid = true;
+    const regexEmail = new RegExp(
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+
+    if (email && !regexEmail.test(text)) isValid = false;
     if (required && text.trim().length === 0) isValid = false;
     if (min && +text < min) isValid = false;
     if (max && +text > max) isValid = false;
+    if (minLength && text.trim().length < minLength) isValid = false;
+    if (maxLength && text.trim().length > maxLength) isValid = false;
 
     dispatchInput({
       type: INPUT_UPDATE,

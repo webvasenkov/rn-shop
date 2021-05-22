@@ -11,12 +11,14 @@ const IconButton = ({ children, style, dataIcon, dataText, styleIcon, styleText,
       <BodyText {...dataText} style={isGhost ? styleText : [styleText, { color: color.primary }]}>
         {children}
       </BodyText>
-      <Ionicons
-        {...dataIcon}
-        size={16}
-        color={isGhost ? color.accent : color.primary}
-        style={[styles.icon, styleIcon]}
-      />
+      {dataIcon && (
+        <Ionicons
+          {...dataIcon}
+          size={16}
+          color={isGhost ? color.accent : color.primary}
+          style={[styles.icon, styleIcon]}
+        />
+      )}
     </Pressable>
   );
 };

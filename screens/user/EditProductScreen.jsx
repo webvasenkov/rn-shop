@@ -1,29 +1,14 @@
 // @ts-nocheck
-import React, { useState, useEffect, useCallback, useReducer } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
-import { addProduct, updateProduct } from '../../store/reducers/productsReducer';
+import { setProducts, addProduct, updateProduct } from '../../store/reducers/productsReducer';
+import { useControlForm } from '../../hooks/useControlForm';
 import Input from '../../components/UI/Input';
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import Card from '../../components/UI/Card';
 import Preloader from '../../components/UI/Preloader';
-
-const FORM_INPUT_UPDATE = 'FORM-INPUT-UPDATE';
-
-const formReducer = (state, action) => {
-  if (action.type === FORM_INPUT_UPDATE) {
-    const updateValues = { ...state.inputValues, [action.input]: action.value };
-    const updateValidities = { ...state.inputValidities, [action.input]: action.isValid };
-
-    let formUpdateIsValid = true;
-    for (const key in updateValidities) formUpdateIsValid = formUpdateIsValid && updateValidities[key];
-
-    return { inputValues: updateValues, inputValidities: updateValidities, formIsValid: formUpdateIsValid };
-  }
-
-  return state;
-};
 
 const EditProductScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +16,6 @@ const EditProductScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const productId = navigation.getParam('productId');
   const editProduct = useSelector((state) => state.products.user.find((product) => product.id === productId));
-
   const initialState = {
     inputValues: {
       title: editProduct?.title ?? '',
@@ -47,8 +31,7 @@ const EditProductScreen = ({ navigation }) => {
     },
     formIsValid: !!editProduct,
   };
-
-  const [formState, dispatchFormState] = useReducer(formReducer, initialState);
+  const [formState, onInputChange] = useControlForm(initialState);
   const { inputValues, formIsValid } = formState;
 
   useEffect(() => {
@@ -82,18 +65,6 @@ const EditProductScreen = ({ navigation }) => {
   useEffect(() => {
     navigation.setParams({ submit: handleSubmit });
   }, [handleSubmit]);
-
-  const onInputChange = useCallback(
-    (id, text, isValid) => {
-      dispatchFormState({
-        type: FORM_INPUT_UPDATE,
-        value: text,
-        isValid,
-        input: id,
-      });
-    },
-    [dispatchFormState]
-  );
 
   if (isLoading) return <Preloader />;
 

@@ -1,11 +1,15 @@
 import React from 'react';
 import { createAppContainer } from 'react-navigation';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
+import { useDispatch } from 'react-redux';
+import { logoutAC } from '../store/reducers/authReducer';
 import { createSwitchNavigator } from 'react-navigation';
 import { color } from '../utils/styleGuide';
 import { Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
+import IconButton from '../components/UI/IconButton';
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
 import CartScreen from '../screens/shop/CartScreen';
@@ -13,6 +17,7 @@ import OrdersScreen from '../screens/shop/OrdersScreen';
 import UserProductsScreen from '../screens/user/UserProductsScreen';
 import EditProductScreen from '../screens/user/EditProductScreen';
 import AuthScreen from '../screens/user/AuthScreen';
+import StartupScreen from '../screens/user/StartupScreen';
 
 const defaultNavigationOptions = {
   headerTintColor: Platform.OS === 'android' ? color.primary : color.accent,
@@ -35,7 +40,10 @@ const ProductsNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions,
-    navigationOptions: { drawerIcon: ({ tintColor }) => <Ionicons name='cube-outline' size={21} color={tintColor} /> },
+    navigationOptions: {
+      drawerLabel: 'All Products',
+      drawerIcon: ({ tintColor }) => <Ionicons name='cube-outline' size={21} color={tintColor} />,
+    },
   }
 );
 
@@ -60,7 +68,7 @@ const UserProductsNavigator = createStackNavigator(
   {
     defaultNavigationOptions,
     navigationOptions: {
-      drawerLabel: 'User Products',
+      drawerLabel: 'My Products',
       drawerIcon: ({ tintColor }) => <Ionicons name='person-circle-outline' size={21} color={tintColor} />,
     },
   }
@@ -76,7 +84,22 @@ const ShopNavigator = createDrawerNavigator(
     contentOptions: {
       activeTintColor: color.accent,
     },
-    hideStatusBar: true,
+    contentComponent: (props) => {
+      const dispatch = useDispatch();
+
+      return (
+        <View style={{ flex: 1, paddingTop: Constants.statusBarHeight }}>
+          <DrawerItems {...props} />
+          <IconButton
+            style={{ alignSelf: 'center', marginTop: 15 }}
+            dataIcon={{ name: 'log-out-outline' }}
+            onPress={() => dispatch(logoutAC())}
+          >
+            Logout
+          </IconButton>
+        </View>
+      );
+    },
   }
 );
 
@@ -88,6 +111,7 @@ const AuthNavigator = createStackNavigator(
 );
 
 const MainNavigator = createSwitchNavigator({
+  Startup: StartupScreen,
   Auth: AuthNavigator,
   Shop: ShopNavigator,
 });

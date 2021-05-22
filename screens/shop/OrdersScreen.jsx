@@ -11,7 +11,6 @@ import BodyText from '../../components/UI/BodyText';
 import TitleText from '../../components/UI/TitleText';
 import Preloader from '../../components/UI/Preloader';
 import Refresh from '../../components/UI/Refresh';
-import Card from '../../components/UI/Card';
 
 const OrdersScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -43,12 +42,11 @@ const OrdersScreen = ({ navigation }) => {
   }, [loadOrders]);
 
   if (isLoading) return <Preloader />;
+
   if (!isLoading && !orders.length)
     return (
       <View style={styles.centredContainer}>
-        <Card pad={15}>
-          <BodyText>You haven't made an order yet!</BodyText>
-        </Card>
+        <BodyText>You haven't made an order yet!</BodyText>
       </View>
     );
   if (error) return <Refresh onRefresh={loadOrders} />;

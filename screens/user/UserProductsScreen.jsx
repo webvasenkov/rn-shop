@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, Alert } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, FlatList, Alert, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteProduct } from '../../store/reducers/productsReducer';
+import { setProducts, deleteProduct } from '../../store/reducers/productsReducer';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import IconButton from '../../components/UI/IconButton';
 import ProductItem from '../../components/shop/ProductItem';
 import Preloader from '../../components/UI/Preloader';
+import BodyText from '../../components/UI/BodyText';
 
 const UserProductsScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -58,11 +59,19 @@ const UserProductsScreen = ({ navigation }) => {
 
   if (isLoading) return <Preloader />;
 
+  if (!isLoading && !userProducts.length) {
+    return (
+      <View style={styles.centredContainer}>
+        <BodyText>No products, add something!</BodyText>
+      </View>
+    );
+  }
+
   return <FlatList keyExtractor={(item) => item.id} data={userProducts} renderItem={productItem} />;
 };
 
 UserProductsScreen.navigationOptions = ({ navigation }) => ({
-  headerTitle: 'User Products',
+  headerTitle: 'My Products',
   headerLeft: () => (
     <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
       <Item title='Menu' iconName='menu-outline' onPress={navigation.toggleDrawer} />
@@ -76,3 +85,11 @@ UserProductsScreen.navigationOptions = ({ navigation }) => ({
 });
 
 export default UserProductsScreen;
+
+const styles = StyleSheet.create({
+  centredContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

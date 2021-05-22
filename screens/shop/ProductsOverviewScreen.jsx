@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../../store/reducers/cartReducer';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { setProducts } from '../../store/reducers/productsReducer';
-import Card from '../../components/UI/Card';
 import BodyText from '../../components/UI/BodyText';
 import ProductItem from '../../components/shop/ProductItem';
 import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
@@ -20,6 +19,7 @@ const ProductsOverviewScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const loadProducts = useCallback(async () => {
+    console.log('RUN FETCH PRODUCTS');
     setError('');
     setIsRefreshing(true);
     try {
@@ -49,16 +49,16 @@ const ProductsOverviewScreen = ({ navigation }) => {
   };
 
   if (isLoading) return <Preloader />;
+
+  if (error) return <Refresh onRefresh={loadProducts} />;
+
   if (!isLoading && !products.length) {
     return (
       <View style={styles.centredContainer}>
-        <Card pad={15}>
-          <BodyText>Products list is empty, maybe you can add something!</BodyText>
-        </Card>
+        <BodyText>Products list is empty, maybe you can add something!</BodyText>
       </View>
     );
   }
-  if (error) return <Refresh onRefresh={loadProducts} />;
 
   const productItem = ({ item }) => (
     <ProductItem
@@ -88,6 +88,7 @@ const ProductsOverviewScreen = ({ navigation }) => {
 };
 
 ProductsOverviewScreen.navigationOptions = ({ navigation }) => ({
+  headerTitle: 'All Products',
   headerLeft: () => (
     <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
       <Item title='Menu' iconName='menu-outline' onPress={navigation.toggleDrawer} />

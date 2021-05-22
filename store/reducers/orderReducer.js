@@ -33,33 +33,38 @@ const setOrdersAC = (orders) => ({ type: SET_ORDERS, orders });
 const addOrderAC = (order) => ({ type: ADD_ORDER, order });
 
 // Thunks
-export const setOrders = () => async (dispatch) => {
+export const setOrders = () => async (dispatch, getState) => {
+  const userId = getState().auth.userId;
   try {
-    const response = await fetch('https://rn-shop-95f98-default-rtdb.firebaseio.com/orders/u1.json');
-    const orders = await response.json();
+    const response = await fetch(`https://rn-shop-95f98-default-rtdb.firebaseio.com/orders/${userId}.json`);
+    const ordersData = await response.json();
 
-    const normalizeOrders = Object.keys(orders).map((key) => {
-      const { items, totalAmount, date } = orders[key];
+    const orders = Object.keys(ordersData).map((key) => {
+      const { items, totalAmount, date } = ordersData[key];
       return new Order(key, items, totalAmount, new Date(date));
     });
 
-    dispatch(setOrdersAC(normalizeOrders));
+    dispatch(setOrdersAC(orders));
   } catch (err) {
     throw err;
   }
 };
 
-export const addOrder = (totalAmount, items) => async (dispatch) => {
+export const addOrder = (totalAmount, items) => async (dispatch, getState) => {
+  const { token, userId } = getState().auth;
   const date = new Date();
   const orderData = { totalAmount, items, date };
 
-  const response = await fetch('https://rn-shop-95f98-default-rtdb.firebaseio.com/orders/u1.json', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ ...orderData, date: date.toISOString() }),
-  });
+  const response = await fetch(
+    `https://rn-shop-95f98-default-rtdb.firebaseio.com/orders/${userId}.json?auth=${token}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ...orderData, date: date.toISOString() }),
+    }
+  );
 
   if (!response.ok) throw new Error('Something went wrong!');
 
